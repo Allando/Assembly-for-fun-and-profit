@@ -1,9 +1,15 @@
 section .data
-    welcome_msg     db "Hello, there", 0xa, 0xa
-    welcome_len     equ 14
+    welcomeMsg      db "Hello, there", 0xa, 0xa
+    lenWelcomeMsg   equ $-welcomeMsg
 
-    instru_msg      db "Write something", 0xa
-    instru_len      equ 16
+    userMsg         db "Write something", 0xa
+    lenUserMsg      equ $-userMsg 
+
+    dispMsg         db "You have entered: ", 0xa
+    lenDispMsg      equ $-dispMsg
+
+section .bss
+    num             resb 5
 
 section .text
     global _start
@@ -12,18 +18,44 @@ _start:
     ;; Print welcome message
     mov     rax, 1
     mov     rdi, 1
-    mov     rsi, welcome_msg
-    mov     rdx, welcome_len
+    mov     rsi, welcomeMsg
+    mov     rdx, lenWelcomeMsg
     syscall
+  
+    call user_input
+    
+    call exit
 
+user_input: 
     ;; Print instruction to user
     mov     rax, 1 
     mov     rdi, 1
-    mov     rsi, instru_msg
-    mov     rdx, instru_len
+    mov     rsi, userMsg
+    mov     rdx, lenUserMsg
     syscall
 
-    call exit
+    ;; Read and store user input
+    mov      rax, 0
+    mov      rdi, 2
+    mov      rsi, num
+    mov      rdx, 5
+    syscall
+
+    ;; Output the message
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, dispMsg
+    mov     rdx, lenDispMsg
+    syscall
+
+    ; output the number 
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, num
+    mov     rdx, 5
+    syscall
+
+    ret
 
 exit:
     mov     rax, 60
