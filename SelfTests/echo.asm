@@ -8,6 +8,8 @@ section .data
     dispMsg         db "You have entered: ", 0xa
     lenDispMsg      equ $-dispMsg
 
+    tooManyChar     db "You have typed too many digits", 0xa
+    lenTooManyChar  equ $-tooManyChar
 section .bss
     num             resb 5
 
@@ -35,11 +37,14 @@ user_input:
     syscall
 
     ;; Read and store user input
-    mov      rax, 0
-    mov      rdi, 2
-    mov      rsi, num
-    mov      rdx, 5
+    mov     rax, 0
+    mov     rdi, 2
+    cmp     rsi, 5
+    jg      errMsg
+    mov     rsi, num
+    mov     rdx, 5
     syscall
+    
 
     ;; Output the message
     mov     rax, 1
@@ -56,6 +61,14 @@ user_input:
     syscall
 
     ret
+
+errMsg:
+    mov     rax, 1
+    mov     rdi, 1
+    mov     rsi, tooManyChar
+    mov     rdx, lenTooManyChar
+    syscall
+    call    user_input
 
 exit:
     mov     rax, 60
