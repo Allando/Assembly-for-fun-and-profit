@@ -21,23 +21,24 @@ _start:
     ;; argc
     ;;
     cmp     rcx, 4
-    jne     errInput
+    jne     errorInput
 
     ;; skip argv[0] - Program name
     add     rsp, 8
 
     ;; get argv[1]
     pop     rsi
+    call    
 
-_md5:
+md5:
 
-_sha1:
+sha1:
 
-_sha256:
+sha256:
 
-_sha512:
+sha512:
 
-_errorInput:
+errorInput:
     mov     rax, 1
     mov     rdi, 1
     mov     rsi, errInput
