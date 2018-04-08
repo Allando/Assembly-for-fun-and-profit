@@ -12,43 +12,55 @@ section .data
     dimpMsg_len     equ $ - disp_msg
  
 section .bss
-    name            resb 25 
+    name    resb 25
+    num     resb 1
 
 section .text
     global _start
 
 _start:
-    mov     eax, 4
-    mov     ebx, 1
-    mov     ecx, wlcm_msg 
-    mov     edx, wlcmMsg_len
-    int     0x80
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, wlcm_msg 
+    mov edx, wlcmMsg_len
+    int 0x80
 
-    mov     cl, 10
+    mov ecx, 10
 l1:
-    mov     eax, 4
-    mov     ebx, 1
-    mov     ecx, req_msg
-    mov     edx, reqMsg_len
+    mov [num], eax
+    mov eax, 4
+    mov ebx, 1
+    push ecx
 
-    mov     eax, 3
-    mov     ebx, 2
-    mov     ecx, name
-    mov     edx, 25
-    int     0x80
-    mov     eax, 4
-    mov     ebx, 1
-    mov     ecx, disp_msg
-    mov     edx, dimpMsg_len
-    int     0x80
-    mov     eax, 4
-    mov     ebx, 1
-    mov     ecx, name
-    mov     edx, 25
-    int     0x80
-    dec     cl
-    jnz     l1
+    mov ecx, num
+    mov edx, 1
+    int 0x80
 
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, req_msg
+    mov edx, reqMsg_len
+    int 0x80
+
+    mov eax, 3
+    mov ebx, 2
+    mov ecx, name
+    mov edx, 25
+    int 0x80
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, disp_msg
+    mov edx, dimpMsg_len
+    int 0x80
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, name
+    mov edx, 25
+    int 0x80
+
+    dec cx
+    pop cx
+    loop l1
 
     call _exit
 
