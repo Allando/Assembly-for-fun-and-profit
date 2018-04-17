@@ -25,42 +25,47 @@ _start:
     mov edx, wlcmMsg_len
     int 0x80
 
+    mov eax, '1'
     mov ecx, 10
-l1:
-    mov [num], eax
-    mov eax, 4
-    mov ebx, 1
-    push ecx
 
-    mov ecx, num
-    mov edx, 1
-    int 0x80
+    l1:
+        mov [num], eax
+        mov eax, 4
+        mov ebx, 1
+        push ecx
 
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, req_msg
-    mov edx, reqMsg_len
-    int 0x80
+        mov ecx, num
+        mov edx, 1
+        int 0x80
 
-    mov eax, 3
-    mov ebx, 2
-    mov ecx, name
-    mov edx, 25
-    int 0x80
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, disp_msg
-    mov edx, dimpMsg_len
-    int 0x80
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, name
-    mov edx, 25
-    int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, req_msg
+        mov edx, reqMsg_len
+        int 0x80
 
-    dec cx
-    pop cx
-    loop l1
+        mov eax, 3
+        mov ebx, 2
+        mov ecx, name
+        mov edx, 25
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, disp_msg
+        mov edx, dimpMsg_len
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, name
+        mov edx, 25
+        int 0x80
+
+        mov eax, [num]
+        sub eax, '0'
+        inc eax
+        add eax, '0'
+        pop ecx
+
 
     call _exit
 
